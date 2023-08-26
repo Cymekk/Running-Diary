@@ -1,0 +1,69 @@
+@tailwind base;
+*,
+*::after,
+*::before {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+	.labels {
+		@apply text-base block text-left w-full;
+	}
+
+	.inputs {
+		@apply w-full outline-none p-2 text-center rounded text-base;
+	}
+
+	.icons {
+		@apply absolute top-1/2 left-1 -translate-y-1/2 text-base;
+	}
+
+	.links {
+		@apply underline underline-offset-2 text-cyan-800;
+	}
+
+	.inputs-errors {
+		@apply text-base mb-2 text-red-500 font-bold;
+	}
+
+	.empty {
+		@apply border-2 border-red-500;
+	}
+
+	.inputs-box {
+		@apply w-full relative mb-4;
+	}
+
+	.margin {
+		@apply mb-0;
+	}
+
+	.header {
+		@apply w-full h-screen flex flex-col items-center justify-center z-0 bg-[url('../assets/running-small.jpg')] bg-no-repeat bg-center bg-cover;
+	}
+
+	.button {
+		@apply bg-button-primary py-4 px-8 rounded mb-4 text-base font-bold cursor-pointer;
+	}
+
+	.profile-btn {
+		@apply w-10 h-10 bg-[url('../assets/user.svg')] bg-no-repeat bg-center bg-contain border-white border-2 rounded-full;
+	}
+
+	.title {
+		@apply text-white text-xl font-bold;
+	}
+
+	.popup {
+		@apply fixed top-0 left-0 -translate-y-full w-full h-screen bg-dark-rgba transition-transform duration-300;
+	}
+
+	.active {
+		@apply translate-y-0;
+	}
+}
