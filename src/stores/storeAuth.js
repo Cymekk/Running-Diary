@@ -12,7 +12,9 @@ import {
 	updatePassword,
 } from 'firebase/auth'
 import { doc, collection, setDoc, getDoc, deleteDoc, updateDoc } from 'firebase/firestore'
+import { useStoreNotes } from './storeNotes'
 
+let storeNotes
 
 export const useStoreAuth = defineStore('storeAuth', {
 	state: () => {
@@ -24,6 +26,7 @@ export const useStoreAuth = defineStore('storeAuth', {
 
 	actions: {
 		init() {
+			storeNotes = useStoreNotes()
 			onAuthStateChanged(auth, user => {
 				if (user) {
 					this.user.id = user.uid
@@ -37,6 +40,8 @@ export const useStoreAuth = defineStore('storeAuth', {
 					this.loaded = false
 				}
 			})
+
+			storeNotes.init()
 		},
 
 		registerUser(credentials) {

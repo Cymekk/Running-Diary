@@ -1,29 +1,38 @@
 <template>
 	<PopupComponent>
 		<template #login-form>
-			<form
-				@submit.prevent="Reset"
-				class="flex flex-col items-center bg-neutral-200 rounded-lg w-4/5 max-w-md p-4 z-20"
-			>
-				<h3 class="text-lg my-2">Reset Password</h3>
+			<div class="form">
+				<h3 class="font-semibold mb-[16px] text-[26px] text-[#8F9DBF]">Reset Password</h3>
+				<form @submit.prevent="Reset">
+					<label class="label" :class="{ 'label-no-error': !v$.mail.$error, 'label-error': v$.mail.$error }"
+						>Email</label
+					>
+					<div
+						class="input-box"
+						:class="{
+							empty: v$.mail.$error,
+							'no-empty': !v$.mail.$error,
+						}"
+					>
+						<input
+							type="text"
+							class="input"
+							v-model="mail.mail"
+							:class="{ empty: v$.mail.$error }"
+						/>
+						<i class="fa-regular fa-envelope icon"></i>
+					</div>
+					<span v-if="v$.mail.$error" class="input-error">{{ v$.mail.$errors[0].$message }}</span>
+					<input type="submit" class="form-submit" value="Reset" />
 
-				<div class="inputs-box" :class="{ margin: v$.mail.$error }">
-					<input
-						type="text"
-						class="inputs"
-						placeholder="Email"
-						v-model="mail.mail"
-						:class="{ empty: v$.mail.$error }"
-					/>
-					<i class="fa-regular fa-envelope icons"></i>
-				</div>
-				<span v-if="v$.mail.$error" class="inputs-errors">{{ v$.mail.$errors[0].$message }}</span>
-				<button type="submit" class="button">Reset</button>
-				<p class="text-base">Do you have account?<RouterLink to="login" class="links">Sign in here.</RouterLink></p>
-				<p class="text-base">
-					Don't have account? <RouterLink to="register" class="links">Create it here.</RouterLink>
-				</p>
-			</form></template
+					<p class="text-[#8F9DBF] mt-[16px]">
+						Do you have account?<RouterLink to="login" class="link">Sign in here.</RouterLink>
+					</p>
+					<p class="text-[#8F9DBF]">
+						Don't have account? <RouterLink to="register" class="link">Create it here.</RouterLink>
+					</p>
+				</form>
+			</div></template
 		></PopupComponent
 	>
 </template>

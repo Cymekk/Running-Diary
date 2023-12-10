@@ -11,59 +11,58 @@
 @tailwind utilities;
 
 @layer components {
-	.labels {
-		@apply text-base block text-left w-full;
+	.form {
+		@apply flex flex-col items-center bg-[#0A1633] shadow-[0_0_5px_5px_rgba(108,124,166,0.5)] z-10 rounded-md p-[16px] w-[80%] max-w-[400px];
 	}
 
-	.inputs {
-		@apply w-full outline-none p-2 text-center rounded text-base;
+	.input-box {
+		@apply w-full relative rounded-md overflow-hidden border-[1px];
 	}
 
-	.icons {
-		@apply absolute top-1/2 left-1 -translate-y-1/2 text-base;
+	.input {
+		@apply p-[5px] rounded-md w-full text-center bg-transparent focus:outline-none;
 	}
 
-	.links {
-		@apply underline underline-offset-2 text-cyan-800;
+	.input-error {
+		@apply block mb-[16px] text-red-500 text-center;
 	}
 
-	.inputs-errors {
-		@apply text-base mb-2 text-red-500 font-bold;
+	.form-submit {
+		@apply bg-[#8F9DBF] px-4 py-2 rounded-md text-[#0A1633] font-semibold hover:bg-[#293A66] hover:text-[#8F9DBF] transition-colors duration-300 mx-auto block;
+	}
+
+	.link {
+		@apply underline underline-offset-2;
+	}
+
+	.label {
+		@apply block text-center;
 	}
 
 	.empty {
-		@apply border-2 border-red-500;
+		@apply mb-0 border-[#EF4444] text-[#ef4444];
 	}
 
-	.inputs-box {
-		@apply w-full relative mb-4;
+	.no-empty {
+		@apply mb-[16px] border-[#8F9DBF] text-[#8F9DBF];
 	}
 
-	.margin {
-		@apply mb-0;
+	.label-error {
+		@apply text-[#ef4444];
+	}
+	.label-no-error {
+		@apply text-[#8F9DBF];
 	}
 
-	.header {
-		@apply w-full h-screen flex flex-col items-center justify-center z-0 bg-[url('../assets/running-small.jpg')] bg-no-repeat bg-center bg-cover;
-	}
-
-	.button {
-		@apply bg-button-primary py-4 px-8 rounded mb-4 text-base font-bold cursor-pointer;
-	}
-
-	.profile-btn {
-		@apply w-10 h-10 bg-[url('../assets/user.svg')] bg-no-repeat bg-center bg-contain border-white border-2 rounded-full;
+	.icon {
+		@apply absolute z-50 left-[10px] top-1/2 -translate-y-1/2;
 	}
 
 	.title {
-		@apply text-white text-xl font-bold;
+		@apply text-[#8F9DBF] font-semibold text-[24px] text-center;
 	}
 
-	.popup {
-		@apply fixed top-0 left-0 -translate-y-full w-full h-screen bg-dark-rgba transition-transform duration-300;
-	}
-
-	.active {
-		@apply translate-y-0;
+	.button {
+		@apply bg-[#8F9DBF] px-4 py-2 rounded-md text-[#0A1633] font-semibold hover:bg-[#293A66] hover:text-[#8F9DBF] transition-colors duration-300 mx-auto block;
 	}
 }

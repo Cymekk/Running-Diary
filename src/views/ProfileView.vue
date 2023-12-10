@@ -1,5 +1,5 @@
 <template>
-	<main class="px-4">
+	<div class="container p-[16px] max-w-[600px]">
 		<NavbarComponent v-model="isActive">
 			<template #profile>
 				<h2 class="text-2xl text-white font-bold">Your Profile</h2>
@@ -9,135 +9,180 @@
 		<!-- Profile Details Section -->
 		<SectionComponent>
 			<template #basic-information>
-				<h3 class="title">Basic Information</h3>
-				<label for="name" class="labels text-white">Name:</label>
-				<div class="inputs-box" :class="{ margin: v$.name.$error }">
-					<input
-						type="text"
-						placeholder="Name"
-						v-model="profileDetails.name"
-						class="inputs"
-						:class="{ empty: v$.name.$error }"
-					/>
-					<i class="fa-solid fa-user icons"></i>
-				</div>
-				<span class="inputs-errors" v-if="v$.name.$error">{{ v$.name.$errors[0].$message }}</span>
-				<label for="surname" class="labels text-white">Surname:</label>
-				<div class="inputs-box" :class="{ margin: v$.surname.$error }">
-					<input
-						type="text"
-						placeholder="Surname"
-						v-model="profileDetails.surname"
-						:class="{ empty: v$.surname.$error }"
-						class="inputs"
-					/>
-					<i class="fa-solid fa-user icons"></i>
-				</div>
-				<span class="inputs-errors" v-if="v$.surname.$error">{{ v$.surname.$errors[0].$message }}</span>
+				<h3 class="title mt-[16px]">Basic Information</h3>
 
-				<label for="weight" class="labels text-white">Weight:</label>
+				<!-- name input -->
+				<label for="name" class="label" :class="{ 'label-no-error': !v$.name.$error, 'label-error': v$.name.$error }"
+					>Name:</label
+				>
+				<div
+					class="input-box w-1/2 mx-auto"
+					:class="{
+						empty: v$.name.$error,
+						'no-empty': !v$.name.$error,
+					}"
+				>
+					<input type="text" v-model="profileDetails.name" class="input" :class="{ empty: v$.name.$error }" />
+					<i class="fa-solid fa-user icon"></i>
+				</div>
+				<span class="input-error" v-if="v$.name.$error">{{ v$.name.$errors[0].$message }}</span>
 
-				<div class="inputs-box" :class="{ margin: v$.weight.$error }">
+				<!-- surname input -->
+				<label
+					for="surname"
+					class="label"
+					:class="{ 'label-no-error': !v$.surname.$error, 'label-error': v$.surname.$error }"
+					>Surname:</label
+				>
+				<div
+					class="input-box w-1/2 mx-auto"
+					:class="{
+						empty: v$.surname.$error,
+						'no-empty': !v$.surname.$error,
+					}"
+				>
+					<input type="text" v-model="profileDetails.surname" :class="{ empty: v$.surname.$error }" class="input" />
+					<i class="fa-solid fa-user icon"></i>
+				</div>
+				<span class="input-error" v-if="v$.surname.$error">{{ v$.surname.$errors[0].$message }}</span>
+
+				<!-- weight input -->
+				<label
+					for="weight"
+					class="label"
+					:class="{ 'label-no-error': !v$.weight.$error, 'label-error': v$.weight.$error }"
+					>Weight:</label
+				>
+				<div
+					class="input-box w-1/2 mx-auto"
+					:class="{
+						empty: v$.weight.$error,
+						'no-empty': !v$.weight.$error,
+					}"
+				>
 					<input
 						type="number"
-						placeholder="Weight"
 						v-model="profileDetails.weight"
 						:class="{ empty: v$.weight.$error }"
 						@focusout="fixNumber"
-						class="inputs"
+						class="input"
 					/>
-					<i class="fa-solid fa-weight-hanging icons"></i>
+					<i class="fa-solid fa-weight-hanging icon"></i>
 				</div>
-				<span class="inputs-errors" v-if="v$.weight.$error && v$.weight.$errors[0].$message">{{
+				<span class="input-error" v-if="v$.weight.$error && v$.weight.$errors[0].$message">{{
 					v$.weight.$errors[0].$message
 				}}</span>
 				<span class="error" v-if="v$.weight.$error && !v$.weight.$errors[0].$message"
 					>Weight value should be from range 1kg to 150kg</span
 				>
 
-				<button class="button mb-0" @click="updateBasicInformation()">Update</button>
+				<button class="button mb-[32px]" @click="updateBasicInformation()">Update</button>
 			</template>
 		</SectionComponent>
 
 		<!-- Profile Image Upload Section -->
 		<SectionComponent>
 			<template #profile-picture>
-				<h3 class="title">Upload profile picture</h3>
+				<h3 class="title mb-[16px]">Upload profile picture</h3>
 
-				<div class="flex justify-evenly w-full mt-4">
-					<button class="button relative overflow-hidden">
+				<div class="flex justify-center">
+					<button class="button m-0 relative overflow-hidden">
 						Select File
 						<input type="file" class="absolute top-0 left-0 py-4 opacity-0" @change="showPicture($event)" />
 					</button>
-					<button class="button disabled:opacity-40" @click="uploadFile" :disabled="!picture">Upload File</button>
+					<button class="button m-0 ml-[16px] disabled:opacity-40" @click="uploadFile" :disabled="!picture">
+						Upload File
+					</button>
 				</div>
-				<span v-if="picture">Selected File: {{ picture.name }}</span>
-				<span class="inputs-errors" v-if="isError"> Only "jpg" and "png" files are supported</span>
+				<span class="text-[#8F9DBF]" v-if="picture">Selected File: {{ picture.name }}</span>
+				<span class="input-error" v-if="isError"> Only "jpg" and "png" files are supported</span>
 
-				<img v-if="photo" :src="photo" alt="profile image" class="w-4/5 rounded-xl" />
+				<div
+					class="h-[300px] w-[300px] relative bg-[#344573] shadow-[0_0_5px_5px_rgba(108,124,166,0.5)] rounded-full overflow-hidden mx-auto my-[24px]"
+				>
+					<img v-if="photo" :src="photo" alt="profile image" />
+				</div>
 			</template>
 		</SectionComponent>
 
 		<!-- Change Password Section -->
 		<SectionComponent>
 			<template #change-password>
-				<h3 class="title">Change Password</h3>
-				<label for="password" class="labels text-white">Password:</label>
-				<div class="inputs-box" :class="{ margin: passwordV$.firstPassword.$error }">
+				<h3 class="title my-[32px]">Change Password</h3>
+				<label
+					class="label"
+					:class="{
+						'label-no-error': !passwordV$.firstPassword.$error,
+						'label-error': passwordV$.firstPassword.$error,
+					}"
+					>Password:</label
+				>
+				<div
+					class="input-box w-1/2 mx-auto"
+					:class="{
+						empty: passwordV$.firstPassword.$error,
+						'no-empty': !passwordV$.firstPassword.$error,
+					}"
+				>
 					<input
 						type="password"
-						placeholder="Password"
 						v-model="passwordDetails.firstPassword"
 						:class="{ empty: passwordV$.firstPassword.$error }"
-						class="inputs"
+						class="input"
 					/>
-					<i class="fa-solid fa-lock icons"></i>
+					<i class="fa-solid fa-lock icon"></i>
 				</div>
-				<span class="inputs-errors" v-if="passwordV$.firstPassword.$error">{{
+				<span class="input-error" v-if="passwordV$.firstPassword.$error">{{
 					passwordV$.firstPassword.$errors[0].$message
 				}}</span>
 
-				<label for="surname" class="labels text-white">Repeat Password:</label>
-				<div class="inputs-box" :class="{ margin: passwordV$.repeatedPassword.$error }">
+				<label
+					class="label"
+					:class="{
+						'label-no-error': !passwordV$.repeatedPassword.$error,
+						'label-error': passwordV$.repeatedPassword.$error,
+					}"
+					>Repeat Password:</label
+				>
+				<div
+					class="input-box w-1/2 mx-auto"
+					:class="{
+						empty: passwordV$.repeatedPassword.$error,
+						'no-empty': !passwordV$.repeatedPassword.$error,
+					}"
+				>
 					<input
 						type="password"
-						placeholder="Repeat Password"
 						v-model="passwordDetails.repeatedPassword"
 						:class="{ empty: passwordV$.repeatedPassword.$error }"
-						class="inputs"
+						class="input"
 					/>
-					<i class="fa-solid fa-lock icons"></i>
+					<i class="fa-solid fa-lock icon"></i>
 				</div>
-				<span class="inputs-errors" v-if="passwordV$.repeatedPassword.$error">{{
+				<span class="input-error" v-if="passwordV$.repeatedPassword.$error">{{
 					passwordV$.repeatedPassword.$errors[0].$message
 				}}</span>
-				<button class="button mb-0" @click="validateChangePassword">Change Password</button>
+				<button class="button" @click="validateChangePassword">Change Password</button>
 			</template>
 		</SectionComponent>
 
 		<!-- Remove Account Section -->
 		<SectionComponent class="border-b-0">
 			<template #remove-account>
-				<h3 class="title">Remove account</h3>
+				<h3 class="title my-[32px]">Remove account</h3>
 				<button class="button bg-red-700 text-white mb-0 mt-4" @click="accountRemovalHandler = true">Remove</button>
 			</template>
 		</SectionComponent>
 
 		<MenuComponent :class="{ active: isActive }" v-model="isActive" />
-	</main>
+	</div>
 
 	<!-- Popups -->
 	<!-- Profile Details Update Popup -->
-	<ProfilePopupComponent
-		@wheel.prevent
-		@touchmove.prevent
-		@scroll.prevent
-		:class="{ active: profileDetailsHandler }"
-		v-model="profileDetailsHandler"
-	>
+	<ProfilePopupComponent @wheel.prevent @touchmove.prevent @scroll.prevent v-model="profileDetailsHandler">
 		<template #profile-details-popup>
 			<p class="text-base text-center">Profile details has been updated successfully</p>
-			<button class="button w-2/5 mt-4 mx-auto mb-0" @click="profileDetailsHandler = false">Close</button>
+			<button class="button mt-[16px]" @click="profileDetailsHandler = false">Close</button>
 		</template>
 	</ProfilePopupComponent>
 
@@ -167,20 +212,28 @@
 			<p class="text-base text-center">
 				If you delete your account, you will permanently lose your data. To do that enter your email address below
 			</p>
-			<div class="inputs-box" :class="{ margin: emailV$.email.$error }">
-				<input
-					type="email"
-					placeholder="Email"
-					v-model="emailDetails.email"
-					:class="{ empty: emailV$.email.$error }"
-					class="inputs"
-				/>
-				<i class="fa-solid fa-user icons"></i>
+			<label
+				class="label mt-[16px]"
+				:class="{
+					'label-no-error': !emailV$.email.$error,
+					'label-error': emailV$.email.$error,
+				}"
+				>Email:</label
+			>
+			<div
+				class="input-box w-1/2 mx-auto"
+				:class="{
+					empty: emailV$.email.$error,
+					'no-empty': !emailV$.email.$error,
+				}"
+			>
+				<input type="email" v-model="emailDetails.email" class="input" />
+				<i class="fa-solid fa-user icon"></i>
 			</div>
-			<span class="inputs-errors text-center" v-if="emailV$.email.$error">{{ emailV$.email.$errors[0].$message }}</span>
-			<div class="flex flex-row justify-evenly">
-				<button class="button" @click="closePopup">Close</button>
-				<button class="button bg-red-700 text-white" @click="checkEmail">Remove</button>
+			<span class="input-error" v-if="emailV$.email.$error">{{ emailV$.email.$errors[0].$message }}</span>
+			<div class="flex flex-row justify-center mt-[16px]">
+				<button class="button m-0" @click="closePopup">Close</button>
+				<button class="button m-0 ml-[16px] bg-red-700 text-white" @click="checkEmail">Remove</button>
 			</div>
 		</template>
 	</ProfilePopupComponent>
@@ -244,7 +297,7 @@ const v$ = useValidate(profileRules, profileDetails)
 const updateBasicInformation = () => {
 	v$.value.$validate()
 	if (!v$.value.$error) {
-		storeAuth.updateProfileDetails(profileDetails)
+		// storeAuth.updateProfileDetails(profileDetails)
 		profileDetailsHandler.value = true
 	}
 }
@@ -307,7 +360,7 @@ const validateChangePassword = () => {
 	passwordV$.value.$validate()
 	if (!passwordV$.value.$error) {
 		passwordChangeHandler.value = true
-		storeAuth.updateUserPassword(passwordDetails.firstPassword)
+		// storeAuth.updateUserPassword(passwordDetails.firstPassword)
 	}
 }
 
@@ -332,13 +385,12 @@ const emailV$ = useValidate(emailRules, emailDetails)
 const checkEmail = () => {
 	emailV$.value.$validate()
 	if (!emailV$.value.$error) {
-		storeAuth.deleteUser()
+		// storeAuth.deleteUser()
 		accountRemovalHandler.value = false
 	}
 }
 
 const closePopup = () => {
 	accountRemovalHandler.value = false
-	emailDetails.email = ''
 }
 </script>

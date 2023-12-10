@@ -1,41 +1,56 @@
 <template>
 	<PopupComponent>
 		<template #login-form>
-			<form @submit.prevent="Login" class="flex flex-col items-center bg-neutral-200 rounded-lg w-4/5 max-w-md p-4 z-20">
-				<h3 class="text-lg my-2">Login</h3>
-				<label class="labels">Email</label>
-				<div class="inputs-box" :class="{ margin: v$.email.$error }">
-					<input
-						type="text"
-						class="inputs"
-						placeholder="Email"
-						v-model="credentials.email"
-						:class="{ empty: v$.email.$error }"
-					/>
-					<i class="fa-regular fa-envelope icons"></i>
-				</div>
-				<span v-if="v$.email.$error" class="inputs-errors">{{ v$.email.$errors[0].$message }}</span>
+			<div class="form">
+				<h3 class="font-semibold mb-[16px] text-[26px] text-[#8F9DBF]">Login</h3>
+				<form @submit.prevent="Login" class="">
+					<!-- email box -->
+					<label class="label" :class="{ 'label-no-error': !v$.email.$error, 'label-error': v$.email.$error }"
+						>Email</label
+					>
+					<div
+						class="input-box"
+						:class="{
+							empty: v$.email.$error,
+							'no-empty': !v$.email.$error,
+						}"
+					>
+						<input type="text" class="input" v-model="credentials.email" :class="{ empty: v$.email.$error }" />
+						<i class="fa-regular fa-envelope icon"></i>
+					</div>
+					<span v-if="v$.email.$error" class="input-error">{{ v$.email.$errors[0].$message }}</span>
 
-				<label class="labels">Password</label>
-				<div class="inputs-box" :class="{ margin: v$.password.$error }">
-					<input
-						type="password"
-						class="inputs"
-						placeholder="Password"
-						v-model="credentials.password"
-						:class="{ empty: v$.password.$error }"
-					/>
-					<i class="fa-solid fa-lock icons"></i>
-				</div>
-				<span v-if="v$.password.$error" class="inputs-errors">{{ v$.password.$errors[0].$message }}</span>
-				<button type="submit" class="button">Login</button>
-				<p class="text-base">
-					Don't have account?
-					<RouterLink to="register" class="links">Create it here.</RouterLink>
-				</p>
-				<p class="text-base">Forgot password? <RouterLink to="reset" class="links">Reset it here.</RouterLink></p>
-			</form></template
-		>
+					<!-- password box -->
+					<label class="label" :class="{ 'label-no-error': !v$.password.$error, 'label-error': v$.password.$error }"
+						>Password</label
+					>
+					<div
+						class="input-box"
+						:class="{
+							empty: v$.password.$error,
+							'no-empty': !v$.password.$error,
+						}"
+					>
+						<input
+							type="password"
+							class="input"
+							v-model="credentials.password"
+							:class="{ empty: v$.password.$error }"
+						/>
+						<i class="fa-solid fa-lock icon"></i>
+					</div>
+					<span v-if="v$.password.$error" class="input-error">{{ v$.password.$errors[0].$message }}</span>
+
+					<input type="submit" value="Login" class="form-submit" />
+
+					<p class="text-[#8F9DBF] mt-[16px]">
+						Don't have account?
+						<RouterLink to="register" class="link">Create it here.</RouterLink>
+					</p>
+					<p class="text-[#8F9DBF]">Forgot password? <RouterLink to="reset" class="link">Reset it here.</RouterLink></p>
+				</form>
+			</div>
+		</template>
 	</PopupComponent>
 </template>
 

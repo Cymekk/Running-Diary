@@ -1,5 +1,5 @@
 <template>
-	<section class="py-8 flex flex-col items-center border-b-2 border-slate-200">
+	<section class="">
 		<slot name="basic-information"></slot>
 		<slot name="profile-picture"></slot>
 		<slot name="change-password"></slot>
