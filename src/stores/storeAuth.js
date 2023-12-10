@@ -1,5 +1,5 @@
-import { defineStore } from 'pinia'
-import { auth, db } from '../firebase/index'
+import { defineStore } from "pinia"
+import { auth, db } from "../firebase/index"
 import {
 	createUserWithEmailAndPassword,
 	signInWithEmailAndPassword,
@@ -10,13 +10,20 @@ import {
 	sendPasswordResetEmail,
 	deleteUser,
 	updatePassword,
-} from 'firebase/auth'
-import { doc, collection, setDoc, getDoc, deleteDoc, updateDoc } from 'firebase/firestore'
-import { useStoreNotes } from './storeNotes'
+} from "firebase/auth"
+import {
+	doc,
+	collection,
+	setDoc,
+	getDoc,
+	deleteDoc,
+	updateDoc,
+} from "firebase/firestore"
+import { useStoreNotes } from "./storeNotes"
 
 let storeNotes
 
-export const useStoreAuth = defineStore('storeAuth', {
+export const useStoreAuth = defineStore("storeAuth", {
 	state: () => {
 		return {
 			user: {},
@@ -34,19 +41,23 @@ export const useStoreAuth = defineStore('storeAuth', {
 					this.user.email = user.email
 					this.getNameAndSurname()
 					this.loaded = true
-					this.router.push('/')
+					this.router.push("/")
+					storeNotes.init()
 				} else {
 					this.user = {}
+					this.router.push("/login")
 					this.loaded = false
 				}
 			})
-
-			storeNotes.init()
 		},
 
 		registerUser(credentials) {
 			const auth = getAuth()
-			createUserWithEmailAndPassword(auth, credentials.email, credentials.password)
+			createUserWithEmailAndPassword(
+				auth,
+				credentials.email,
+				credentials.password
+			)
 				.then(user => {
 					updateProfile(auth.currentUser, {
 						displayName: `${credentials.name} ${credentials.surname}`,
@@ -67,7 +78,7 @@ export const useStoreAuth = defineStore('storeAuth', {
 		logoutUser() {
 			signOut(auth)
 				.then(() => {
-					this.router.push('/login')
+					this.router.push("/login")
 				})
 				.catch(error => {
 					console.log(error.message)
@@ -83,14 +94,14 @@ export const useStoreAuth = defineStore('storeAuth', {
 		},
 
 		async addNameAndSurname(credentials) {
-			await setDoc(doc(db, 'users', this.user.id), {
+			await setDoc(doc(db, "users", this.user.id), {
 				name: credentials.name,
 				surname: credentials.surname,
 			})
 		},
 
 		async updateProfileDetails(profileDetails) {
-			const docRef = doc(db, 'users', this.user.id)
+			const docRef = doc(db, "users", this.user.id)
 
 			await updateDoc(docRef, {
 				name: profileDetails.name,
@@ -100,7 +111,7 @@ export const useStoreAuth = defineStore('storeAuth', {
 		},
 
 		async getNameAndSurname() {
-			const docRef = doc(db, 'users', this.user.id)
+			const docRef = doc(db, "users", this.user.id)
 			const docSnap = await getDoc(docRef)
 			if (docSnap.exists()) {
 				this.user.name = docSnap.data().name
@@ -108,7 +119,7 @@ export const useStoreAuth = defineStore('storeAuth', {
 				if (docSnap.data().weight) {
 					this.user.weight = docSnap.data().weight
 				} else {
-					this.user.weight = ''
+					this.user.weight = ""
 				}
 			} else {
 				return
@@ -119,14 +130,14 @@ export const useStoreAuth = defineStore('storeAuth', {
 			const id = this.user.id
 			deleteUser(auth.currentUser)
 				.then(() => {
-					this.router.push('/login')
+					this.router.push("/login")
 					this.removeUserData(id)
 				})
 				.catch(error => alert(error))
 		},
 
 		async removeUserData(id) {
-			await deleteDoc(doc(db, 'users', id))
+			await deleteDoc(doc(db, "users", id))
 		},
 
 		updateProfileImage(url) {
@@ -135,7 +146,7 @@ export const useStoreAuth = defineStore('storeAuth', {
 				photoURL: url,
 			})
 				.then(() => {
-					const docRef = doc(db, 'users', this.user.id)
+					const docRef = doc(db, "users", this.user.id)
 
 					updateDoc(docRef, {
 						photo: url,
@@ -157,7 +168,7 @@ export const useStoreAuth = defineStore('storeAuth', {
 
 			updatePassword(user, pwd)
 				.then(() => {
-					console.log('password has been changed')
+					console.log("password has been changed")
 				})
 				.catch(error => {
 					alert(error.message)

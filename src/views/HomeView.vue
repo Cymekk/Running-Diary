@@ -44,10 +44,6 @@ import TrainingComponent from '../components/TrainingComponent.vue'
 const storeAuth = useStoreAuth()
 const storeNotes = useStoreNotes()
 
-//init Store Auth on Mounted
-onMounted(() => {
-	storeAuth.init()
-})
 
 //variable to handling menu
 const isActive = ref(false)
