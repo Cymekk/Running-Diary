@@ -9,7 +9,9 @@ Live: https://running-diary-38ae0.web.app/
 For testing you can use test account:
 <br>
 -login: test@test.com
+<br>
 -password: test123
+<br>
 Or create your own account.
 
 Stack in this project:
