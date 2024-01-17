@@ -1,8 +1,10 @@
-# running-log(in progress)
+# Running Diary
 
 ## Description
 
-Running Diary is application which will allows you to store your running logs, such as kilometers, time, pace, burned calories. Also there will be some statistics like how many training you had, total time, total burned calories and some graphs like run kilometers each month. There is also user "dashboard" which allow you to change your basic information(name, surname or your weight), upload your profile picture, change password or remove your account.
+Running Diary is application which will allows you to store your running logs, you need to provide date, time, and covered distance. Details like burned calories, avarage pace and average speed will be calculate automatically. Goals view is feature which allow you to create some training goals, like "Finish 5km run under 30 minutes", "Lose weight" etc. At statistic view you can check your statistics like fastest 5km, 10km runs, number of trainings etc. Also in statistics view is chart which show how many kilometers you traveled per month.
+
+Live: https://running-diary-38ae0.web.app/
 
 Stack in this project:
 <br />
@@ -14,15 +16,44 @@ Stack in this project:
 <img align="center" alt="Firebase" width="30px" style="padding-right:10px;" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-plain.svg" />
 <br />
 
+## Some images from project
 
-## Some images from project so far
+### Login View
 
 <p align="center">
   <img src="./src/assets/1.jpg" width="400" title="hover text">
   <img src="./src/assets/2.jpg" width="400" title="hover text">
   <img src="./src/assets/3.jpg" width="400" title="hover text">
+</p>
+
+### Main View
+
+<p align="center">
   <img src="./src/assets/4.jpg" width="400" title="hover text">
   <img src="./src/assets/5.jpg" width="400" title="hover text">
+  <img src="./src/assets/6.jpg" width="400" title="hover text">
+</p>
+
+### Profile management
+
+<p align="center">
+  <img src="./src/assets/7.jpg" width="400" title="hover text">
+  <img src="./src/assets/8.jpg" width="400" title="hover text">
+</p>
+
+### Statistics view
+
+<p align="center">
+  <img src="./src/assets/9.jpg" width="400" title="hover text">
+</p>
+
+### Goals View
+
+<p align="center">
+  <img src="./src/assets/10.jpg" width="400" title="hover text">
+  <img src="./src/assets/11.jpg" width="400" title="hover text">
+  <img src="./src/assets/12.jpg" width="400" title="hover text">
+  <img src="./src/assets/13.jpg" width="400" title="hover text">
 </p>
 
 ## Recommended IDE Setup
