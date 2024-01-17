@@ -6,6 +6,11 @@ Running Diary is application which will allows you to store your running logs, y
 
 Live: https://running-diary-38ae0.web.app/
 
+For testing you can use test account:
+-login: test@test.com
+-password: test123
+Or create your own account.
+
 Stack in this project:
 <br />
 <img align="center" alt="HTML5" width="30px" style="padding-right:10px;" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" />
