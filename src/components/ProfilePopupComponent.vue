@@ -1,6 +1,6 @@
 <template>
 	<div
-		class="popup fixed inset-0 transition-transform duration-700 bg-black/50 z-50"
+		class="popup fixed inset-0 transition-transform-opacity duration-700 bg-black/50 z-50"
 		:class="{ '-translate-y-[150%] opacity-0': !modelValue, 'translate-y-0 opacity-100': modelValue }"
 	>
 		<div

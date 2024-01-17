@@ -1,10 +1,6 @@
 <template>
-	<div class="container p-[16px] max-w-[600px]">
-		<NavbarComponent v-model="isActive">
-			<template #profile>
-				<h2 class="text-2xl text-white font-bold">Your Profile</h2>
-			</template>
-		</NavbarComponent>
+	<div class="container max-w-[600px] pb-[32px]">
+		<NavbarComponent title="Your Profile" />
 
 		<!-- Profile Details Section -->
 		<SectionComponent>
@@ -84,13 +80,19 @@
 		<SectionComponent>
 			<template #profile-picture>
 				<h3 class="title mb-[16px]">Upload profile picture</h3>
-
 				<div class="flex justify-center">
-					<button class="button m-0 relative overflow-hidden">
+					<button
+						class="button m-0 relative overflow-hidden disabled:opacity-40 disabled:pointer-events-none"
+						:disabled="isTestAccount"
+					>
 						Select File
 						<input type="file" class="absolute top-0 left-0 py-4 opacity-0" @change="showPicture($event)" />
 					</button>
-					<button class="button m-0 ml-[16px] disabled:opacity-40" @click="uploadFile" :disabled="!picture">
+					<button
+						class="button m-0 ml-[16px] disabled:opacity-40 disabled:pointer-events-none"
+						@click="uploadFile"
+						:disabled="!picture"
+					>
 						Upload File
 					</button>
 				</div>
@@ -98,10 +100,14 @@
 				<span class="input-error" v-if="isError"> Only "jpg" and "png" files are supported</span>
 
 				<div
+					v-if="photo"
 					class="h-[300px] w-[300px] relative bg-[#344573] shadow-[0_0_5px_5px_rgba(108,124,166,0.5)] rounded-full overflow-hidden mx-auto my-[24px]"
 				>
-					<img v-if="photo" :src="photo" alt="profile image" />
+					<img :src="photo" alt="profile image" class="object-fill h-[300px] w-[300px]" />
 				</div>
+				<span class="test-account-info mt-[16px] font-semibold" v-if="isTestAccount"
+					>Upload profile picture feature isn't available on test account</span
+				>
 			</template>
 		</SectionComponent>
 
@@ -109,60 +115,72 @@
 		<SectionComponent>
 			<template #change-password>
 				<h3 class="title my-[32px]">Change Password</h3>
-				<label
-					class="label"
-					:class="{
-						'label-no-error': !passwordV$.firstPassword.$error,
-						'label-error': passwordV$.firstPassword.$error,
-					}"
-					>Password:</label
-				>
-				<div
-					class="input-box w-1/2 mx-auto"
-					:class="{
-						empty: passwordV$.firstPassword.$error,
-						'no-empty': !passwordV$.firstPassword.$error,
-					}"
-				>
-					<input
-						type="password"
-						v-model="passwordDetails.firstPassword"
-						:class="{ empty: passwordV$.firstPassword.$error }"
-						class="input"
-					/>
-					<i class="fa-solid fa-lock icon"></i>
-				</div>
-				<span class="input-error" v-if="passwordV$.firstPassword.$error">{{
-					passwordV$.firstPassword.$errors[0].$message
-				}}</span>
+				<form @submit.prevent="validateChangePassword()">
+					<label
+						class="label"
+						:class="{
+							'label-no-error': !passwordV$.firstPassword.$error,
+							'label-error': passwordV$.firstPassword.$error,
+						}"
+						>Password:</label
+					>
+					<div
+						class="input-box w-1/2 mx-auto"
+						:class="{
+							empty: passwordV$.firstPassword.$error,
+							'no-empty': !passwordV$.firstPassword.$error,
+						}"
+					>
+						<input
+							type="password"
+							autocomplete="off"
+							v-model="passwordDetails.firstPassword"
+							:class="{ empty: passwordV$.firstPassword.$error }"
+							class="input"
+						/>
+						<i class="fa-solid fa-lock icon"></i>
+					</div>
+					<span class="input-error" v-if="passwordV$.firstPassword.$error">{{
+						passwordV$.firstPassword.$errors[0].$message
+					}}</span>
 
-				<label
-					class="label"
-					:class="{
-						'label-no-error': !passwordV$.repeatedPassword.$error,
-						'label-error': passwordV$.repeatedPassword.$error,
-					}"
-					>Repeat Password:</label
-				>
-				<div
-					class="input-box w-1/2 mx-auto"
-					:class="{
-						empty: passwordV$.repeatedPassword.$error,
-						'no-empty': !passwordV$.repeatedPassword.$error,
-					}"
-				>
+					<label
+						class="label"
+						:class="{
+							'label-no-error': !passwordV$.repeatedPassword.$error,
+							'label-error': passwordV$.repeatedPassword.$error,
+						}"
+						>Repeat Password:</label
+					>
+					<div
+						class="input-box w-1/2 mx-auto"
+						:class="{
+							empty: passwordV$.repeatedPassword.$error,
+							'no-empty': !passwordV$.repeatedPassword.$error,
+						}"
+					>
+						<input
+							type="password"
+							autocomplete="off"
+							v-model="passwordDetails.repeatedPassword"
+							:class="{ empty: passwordV$.repeatedPassword.$error }"
+							class="input"
+						/>
+						<i class="fa-solid fa-lock icon"></i>
+					</div>
+					<span class="input-error" v-if="passwordV$.repeatedPassword.$error">{{
+						passwordV$.repeatedPassword.$errors[0].$message
+					}}</span>
 					<input
-						type="password"
-						v-model="passwordDetails.repeatedPassword"
-						:class="{ empty: passwordV$.repeatedPassword.$error }"
-						class="input"
+						type="submit"
+						value="Change Password"
+						class="cursor-pointer bg-[#8F9DBF] px-4 py-2 rounded-md text-[#0A1633] font-semibold hover:bg-[#293A66] hover:text-[#8F9DBF] transition-colors duration-300 mx-auto block disabled:opacity-40 disabled:pointer-events-none"
+						:disabled="isTestAccount"
 					/>
-					<i class="fa-solid fa-lock icon"></i>
-				</div>
-				<span class="input-error" v-if="passwordV$.repeatedPassword.$error">{{
-					passwordV$.repeatedPassword.$errors[0].$message
-				}}</span>
-				<button class="button" @click="validateChangePassword">Change Password</button>
+				</form>
+				<span v-if="isTestAccount" class="test-account-info mt-[16px] font-semibold"
+					>Change password feature isn't available on test account</span
+				>
 			</template>
 		</SectionComponent>
 
@@ -170,11 +188,18 @@
 		<SectionComponent class="border-b-0">
 			<template #remove-account>
 				<h3 class="title my-[32px]">Remove account</h3>
-				<button class="button bg-red-700 text-white mb-0 mt-4" @click="accountRemovalHandler = true">Remove</button>
+				<button
+					class="button bg-red-700 text-white mb-0 mt-4 disabled:opacity-40 disabled:pointer-events-none"
+					@click="accountRemovalHandler = true"
+					:disabled="isTestAccount"
+				>
+					Remove
+				</button>
+				<span v-if="isTestAccount" class="test-account-info mt-[16px] font-semibold"
+					>Remove account feature isn't available on test account</span
+				>
 			</template>
 		</SectionComponent>
-
-		<MenuComponent :class="{ active: isActive }" v-model="isActive" />
 	</div>
 
 	<!-- Popups -->
@@ -221,7 +246,7 @@
 				>Email:</label
 			>
 			<div
-				class="input-box w-1/2 mx-auto"
+				class="input-box w-full mx-auto"
 				:class="{
 					empty: emailV$.email.$error,
 					'no-empty': !emailV$.email.$error,
@@ -231,7 +256,7 @@
 				<i class="fa-solid fa-user icon"></i>
 			</div>
 			<span class="input-error" v-if="emailV$.email.$error">{{ emailV$.email.$errors[0].$message }}</span>
-			<div class="flex flex-row justify-center mt-[16px]">
+			<div class="flex flex-row justify-center">
 				<button class="button m-0" @click="closePopup">Close</button>
 				<button class="button m-0 ml-[16px] bg-red-700 text-white" @click="checkEmail">Remove</button>
 			</div>
@@ -241,25 +266,26 @@
 
 <script setup>
 //imports
-import { ref, reactive, computed } from 'vue'
+import { ref, reactive, computed, watch } from 'vue'
 import { useStoreAuth } from '../stores/storeAuth'
 import { getStorage, ref as storageReference, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
 import { required, email, minLength, alpha, sameAs } from '@vuelidate/validators'
 import useValidate from '@vuelidate/core'
 import NavbarComponent from '../components/NavbarComponent.vue'
-import MenuComponent from '../components/MenuComponent.vue'
 import SectionComponent from '../components/SectionComponent.vue'
 import ProfilePopupComponent from '../components/ProfilePopupComponent.vue'
-
-//variable handling menu
-const isActive = ref(false)
 
 //store
 const storeAuth = useStoreAuth()
 const photo = computed(() => storeAuth.user.photo)
 
+//is test account
+const isTestAccount = computed(() => {
+	return storeAuth.isTestAccount
+})
+
 //handling "Basic Information Section"
-const profileDetails = reactive({
+let profileDetails = reactive({
 	name: storeAuth.user.name,
 	surname: storeAuth.user.surname,
 	weight: storeAuth.user.weight,
@@ -268,6 +294,15 @@ const profileDetails = reactive({
 //handler of showing popup after successfully updated profile details
 const profileDetailsHandler = ref(false)
 
+watch(profileDetailsHandler, newVal => {
+	if (!newVal) {
+		profileDetails.name = storeAuth.user.name
+		profileDetails.surname = storeAuth.user.surname
+		profileDetails.weight = storeAuth.user.weight
+	}
+})
+
+//formatting weight for 2 digits place
 const fixNumber = () => {
 	profileDetails.weight = profileDetails.weight.toFixed(2)
 }
@@ -297,7 +332,7 @@ const v$ = useValidate(profileRules, profileDetails)
 const updateBasicInformation = () => {
 	v$.value.$validate()
 	if (!v$.value.$error) {
-		// storeAuth.updateProfileDetails(profileDetails)
+		storeAuth.updateProfileDetails(profileDetails)
 		profileDetailsHandler.value = true
 	}
 }
@@ -315,7 +350,7 @@ const uploadFile = () => {
 
 	if (formatFiles === 'png' || formatFiles === 'jpg') {
 		const storage = getStorage()
-		const storageRef = storageReference(storage, `pictures/${picture.value.name}`)
+		const storageRef = storageReference(storage, `pictures/${storeAuth.user.id}/${picture.value.name}`)
 
 		const uploadTask = uploadBytesResumable(storageRef, picture.value)
 		uploadTask.on('state_changed', () => {
@@ -360,7 +395,10 @@ const validateChangePassword = () => {
 	passwordV$.value.$validate()
 	if (!passwordV$.value.$error) {
 		passwordChangeHandler.value = true
-		// storeAuth.updateUserPassword(passwordDetails.firstPassword)
+		storeAuth.updateUserPassword(passwordDetails.firstPassword)
+		passwordV$.value.$reset()
+		passwordDetails.firstPassword = ''
+		passwordDetails.repeatedPassword = ''
 	}
 }
 
@@ -385,7 +423,7 @@ const emailV$ = useValidate(emailRules, emailDetails)
 const checkEmail = () => {
 	emailV$.value.$validate()
 	if (!emailV$.value.$error) {
-		// storeAuth.deleteUser()
+		storeAuth.removeAccount()
 		accountRemovalHandler.value = false
 	}
 }

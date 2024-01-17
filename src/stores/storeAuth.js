@@ -1,5 +1,5 @@
-import { defineStore } from "pinia"
-import { auth, db } from "../firebase/index"
+import { defineStore } from 'pinia'
+import { auth, db } from '../firebase/index'
 import {
 	createUserWithEmailAndPassword,
 	signInWithEmailAndPassword,
@@ -10,54 +10,58 @@ import {
 	sendPasswordResetEmail,
 	deleteUser,
 	updatePassword,
-} from "firebase/auth"
-import {
-	doc,
-	collection,
-	setDoc,
-	getDoc,
-	deleteDoc,
-	updateDoc,
-} from "firebase/firestore"
-import { useStoreNotes } from "./storeNotes"
+} from 'firebase/auth'
+import { doc, collection, setDoc, getDoc, deleteDoc, updateDoc } from 'firebase/firestore'
+import { getStorage, ref, deleteObject, listAll } from 'firebase/storage'
+import { useStoreNotes } from './storeNotes'
+import { useStoreGoals } from './storeGoals'
 
 let storeNotes
+let storeGoals
 
-export const useStoreAuth = defineStore("storeAuth", {
+export const useStoreAuth = defineStore('storeAuth', {
 	state: () => {
 		return {
 			user: {},
 			loaded: false,
+			isTestAccount: false,
+			appVisited: false,
 		}
 	},
 
 	actions: {
 		init() {
 			storeNotes = useStoreNotes()
+			storeGoals = useStoreGoals()
 			onAuthStateChanged(auth, user => {
 				if (user) {
 					this.user.id = user.uid
 					this.user.photo = user.photoURL
 					this.user.email = user.email
+					if (user.uid === 'WY4FY8AHpIdm69UfcbylBtdVnp72') {
+						this.isTestAccount = true
+					}
 					this.getNameAndSurname()
 					this.loaded = true
-					this.router.push("/")
+					this.appVisited = true
+					this.router.push('/')
 					storeNotes.init()
+					storeGoals.init()
 				} else {
 					this.user = {}
-					this.router.push("/login")
+					storeGoals.clearGoalSnapshot()
+					storeNotes.clearNotesSnapshot()
+					this.router.push('/login')
 					this.loaded = false
+					this.isTestAccount = false
+					this.appVisited = false
 				}
 			})
 		},
 
 		registerUser(credentials) {
 			const auth = getAuth()
-			createUserWithEmailAndPassword(
-				auth,
-				credentials.email,
-				credentials.password
-			)
+			createUserWithEmailAndPassword(auth, credentials.email, credentials.password)
 				.then(user => {
 					updateProfile(auth.currentUser, {
 						displayName: `${credentials.name} ${credentials.surname}`,
@@ -78,7 +82,7 @@ export const useStoreAuth = defineStore("storeAuth", {
 		logoutUser() {
 			signOut(auth)
 				.then(() => {
-					this.router.push("/login")
+					this.router.push('/login')
 				})
 				.catch(error => {
 					console.log(error.message)
@@ -94,24 +98,35 @@ export const useStoreAuth = defineStore("storeAuth", {
 		},
 
 		async addNameAndSurname(credentials) {
-			await setDoc(doc(db, "users", this.user.id), {
+			await setDoc(doc(db, 'users', this.user.id), {
 				name: credentials.name,
 				surname: credentials.surname,
+				appVisited: false,
 			})
 		},
 
 		async updateProfileDetails(profileDetails) {
-			const docRef = doc(db, "users", this.user.id)
+			const docRef = doc(db, 'users', this.user.id)
 
 			await updateDoc(docRef, {
 				name: profileDetails.name,
 				surname: profileDetails.surname,
 				weight: profileDetails.weight,
 			})
+			this.getNameAndSurname()
+		},
+
+		async updateUserWeight(weight) {
+			const docRef = doc(db, 'users', this.user.id)
+			await updateDoc(docRef, {
+				weight: weight,
+			})
+			this.getNameAndSurname
+			location.reload()
 		},
 
 		async getNameAndSurname() {
-			const docRef = doc(db, "users", this.user.id)
+			const docRef = doc(db, 'users', this.user.id)
 			const docSnap = await getDoc(docRef)
 			if (docSnap.exists()) {
 				this.user.name = docSnap.data().name
@@ -119,25 +134,55 @@ export const useStoreAuth = defineStore("storeAuth", {
 				if (docSnap.data().weight) {
 					this.user.weight = docSnap.data().weight
 				} else {
-					this.user.weight = ""
+					this.user.weight = ''
 				}
 			} else {
 				return
 			}
 		},
 
+		deleteProfilePicture() {
+			const storage = getStorage()
+			const pictureDir = ref(storage, `pictures/${this.user.id}`)
+			let picturesArr = []
+
+			listAll(pictureDir)
+				.then(res => {
+					res.items.forEach(itemRef => {
+						picturesArr.push(itemRef.fullPath.split('/')[itemRef.fullPath.split('/').length - 1])
+					})
+					if (picturesArr.length !== 0) this.removeAllFiles(picturesArr)
+				})
+				.catch(err => {
+					console.log(err)
+				})
+		},
+
+		removeAllFiles(arr) {
+			const storage = getStorage()
+			arr.forEach(el => {
+				const pictureRef = ref(storage, `pictures/${this.user.id}/${el}`)
+				deleteObject(pictureRef)
+					.then(() => {})
+					.catch(err => {
+						console.log(err)
+					})
+			})
+			const url = ''
+			this.updateProfileImage(url)
+		},
+
 		deleteUser() {
 			const id = this.user.id
 			deleteUser(auth.currentUser)
 				.then(() => {
-					this.router.push("/login")
 					this.removeUserData(id)
 				})
 				.catch(error => alert(error))
 		},
 
 		async removeUserData(id) {
-			await deleteDoc(doc(db, "users", id))
+			await deleteDoc(doc(db, 'users', id))
 		},
 
 		updateProfileImage(url) {
@@ -146,7 +191,7 @@ export const useStoreAuth = defineStore("storeAuth", {
 				photoURL: url,
 			})
 				.then(() => {
-					const docRef = doc(db, "users", this.user.id)
+					const docRef = doc(db, 'users', this.user.id)
 
 					updateDoc(docRef, {
 						photo: url,
@@ -168,11 +213,39 @@ export const useStoreAuth = defineStore("storeAuth", {
 
 			updatePassword(user, pwd)
 				.then(() => {
-					console.log("password has been changed")
+					console.log('password has been changed')
 				})
 				.catch(error => {
 					alert(error.message)
 				})
+		},
+
+		removeAccount() {
+			storeGoals.removeAllGoals()
+			storeNotes.removeAllNotes()
+			this.deleteProfilePicture()
+			this.deleteUser()
+			this.router.push('/login')
+		},
+
+		changeAppVisited() {
+			this.appVisited = false
+		},
+
+		removeTestAccountWeight() {
+			const docRef = doc(db, 'users', this.user.id)
+			updateDoc(docRef, {
+				weight: '',
+			})
+		},
+
+		resetTestData() {
+			console.log('resetting test data')
+			this.removeTestAccountWeight('')
+			this.getNameAndSurname()
+			storeNotes.removeAllNotes()
+			storeGoals.removeAllGoals()
+			this.appVisited = false
 		},
 	},
 

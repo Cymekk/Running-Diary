@@ -1,15 +1,27 @@
 <template>
-	<main class="menu">
-		<aside class="menu__container" ref="targetRef">
-			<button class="close-btn" @click="closeMenu"></button>
-			<ul>
-				<li>Hello, {{ storeAuth.user.name }}</li>
-				<RouterLink to="/"><li>Home</li></RouterLink>
-				<li>Stats</li>
-				<li><button @click="storeAuth.logoutUser">Logout</button></li>
+	<div
+		class="menu fixed inset-0 z-50 bg-black/50 flex flex-row-reverse transition-opacity-transform duration-500"
+		:class="{ 'opacity-0 translate-x-[100%]': !modelValue, 'opacity-100 translate-x-0': modelValue }"
+	>
+		<div
+			class="links w-1/2 md:w-1/3 max-w-[400px] bg-[#101D40] text-[#6C7CA6] h-full relative flex justify-center items-center"
+			ref="targetRef"
+		>
+			<button
+				class="w-[40px] h-[40px] bg-[url('../assets/icons/x.svg')] bg-no-repeat bg-center absolute top-[15px] right-[15px]"
+				@click="closeMenu"
+			></button>
+			<ul class="text-[20px]">
+				<li class="text-center my-[16px] cursor-pointer">Hello, {{ storeAuth.user.name }}</li>
+				<li class="text-center my-[16px] cursor-pointer" @click="changeView('/')">Home</li>
+				<li class="text-center my-[16px] cursor-pointer" @click="changeView('goals')">Goals</li>
+				<li class="text-center my-[16px] cursor-pointer" @click="changeView('stats')">Stats</li>
+				<li class="text-center my-[16px] cursor-pointer">
+					<button @click="storeAuth.logoutUser" class="button">Logout</button>
+				</li>
 			</ul>
-		</aside>
-	</main>
+		</div>
+	</div>
 </template>
 
 <script setup>
@@ -17,6 +29,14 @@
 import { ref } from 'vue'
 import { useStoreAuth } from '../stores/storeAuth'
 import { onClickOutside } from '@vueuse/core'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+const changeView = view => {
+	router.push(view)
+	closeMenu()
+}
 
 //stores
 const storeAuth = useStoreAuth()
@@ -25,7 +45,6 @@ const storeAuth = useStoreAuth()
 const props = defineProps({
 	modelValue: {
 		type: Boolean,
-		required: true,
 	},
 })
 
@@ -39,80 +58,7 @@ const closeMenu = () => {
 
 //handling click outside
 const targetRef = ref(null)
-
 onClickOutside(targetRef, () => closeMenu())
 </script>
 
-<style lang="scss" scoped>
-.menu {
-	position: fixed;
-	top: 0;
-	transform: translateX(150%);
-	width: 100%;
-
-	min-height: 100svh;
-
-	background-color: rgba(0, 0, 0, 0.45);
-
-	transition: transform 0.3s;
-	&__container {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-
-		position: absolute;
-		right: 0;
-		top: 0;
-
-		width: 60%;
-		max-width: 400px;
-		min-height: 100svh;
-
-		background-color: #000000;
-		background-image: linear-gradient(315deg, #000000 0%, #414141 74%);
-
-		ul {
-			list-style: none;
-			color: #fff;
-			font-size: 1.2rem;
-			text-align: center;
-
-			a {
-				text-decoration: none;
-				color: #fff;
-			}
-
-			li {
-				margin: 1rem;
-
-				button {
-					background-color: var(--button-primary-color);
-					padding: 1rem 2rem;
-					border: none;
-					border-radius: 10px;
-					font-weight: bold;
-				}
-			}
-		}
-
-		.close-btn {
-			position: absolute;
-			right: 10px;
-			top: 10px;
-			width: 50px;
-			height: 50px;
-
-			background: none;
-			background-image: url('../assets/x.svg');
-			background-position: center;
-			background-repeat: no-repeat;
-
-			border: none;
-		}
-	}
-}
-
-.active {
-	transform: translateX(0);
-}
-</style>
+<style lang="scss" scoped></style>

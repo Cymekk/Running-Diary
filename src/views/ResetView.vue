@@ -14,16 +14,11 @@
 							'no-empty': !v$.mail.$error,
 						}"
 					>
-						<input
-							type="text"
-							class="input"
-							v-model="mail.mail"
-							:class="{ empty: v$.mail.$error }"
-						/>
+						<input type="text" class="input" v-model="mail.mail" :class="{ empty: v$.mail.$error }" />
 						<i class="fa-regular fa-envelope icon"></i>
 					</div>
 					<span v-if="v$.mail.$error" class="input-error">{{ v$.mail.$errors[0].$message }}</span>
-					<input type="submit" class="form-submit" value="Reset" />
+					<input type="submit" class="form-submit cursor-pointer" value="Reset" />
 
 					<p class="text-[#8F9DBF] mt-[16px]">
 						Do you have account?<RouterLink to="login" class="link">Sign in here.</RouterLink>

@@ -66,6 +66,7 @@
 						<input
 							type="password"
 							class="input"
+							autocomplete="off"
 							v-model="credentials.password"
 							:class="{ empty: v$.password.$error }"
 						/>
@@ -89,6 +90,7 @@
 						<input
 							type="password"
 							class="input"
+							autocomplete="off"
 							v-model="credentials.repeatpassword"
 							:class="{ empty: v$.repeatpassword.$error }"
 						/>
@@ -96,7 +98,7 @@
 					</div>
 					<span v-if="v$.repeatpassword.$error" class="input-error">{{ v$.repeatpassword.$errors[0].$message }}</span>
 
-					<input type="submit" value="Register" class="form-submit" />
+					<input type="submit" value="Register" class="form-submit cursor-pointer" />
 
 					<p class="text-[#8F9DBF] mt-[16px]">
 						Do you have account? <RouterLink to="login" class="link">Sign in here.</RouterLink>
@@ -164,3 +166,16 @@ const Register = () => {
 	}
 }
 </script>
+
+<style>
+/* Hide scrollbar for Chrome, Safari and Opera */
+.form::-webkit-scrollbar {
+	display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.form {
+	-ms-overflow-style: none; /* IE and Edge */
+	scrollbar-width: none; /* Firefox */
+}
+</style>

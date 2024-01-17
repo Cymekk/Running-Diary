@@ -20,7 +20,7 @@
 	}
 
 	.input {
-		@apply p-[5px] rounded-md w-full text-center bg-transparent focus:outline-none;
+		@apply p-[5px] rounded-md w-full text-center bg-transparent focus:outline-none placeholder:text-[#8F9DBF] placeholder:opacity-50;
 	}
 
 	.input-error {
@@ -55,7 +55,7 @@
 	}
 
 	.icon {
-		@apply absolute z-50 left-[10px] top-1/2 -translate-y-1/2;
+		@apply absolute z-20 left-[10px] top-1/2 -translate-y-1/2;
 	}
 
 	.title {
@@ -64,5 +64,9 @@
 
 	.button {
 		@apply bg-[#8F9DBF] px-4 py-2 rounded-md text-[#0A1633] font-semibold hover:bg-[#293A66] hover:text-[#8F9DBF] transition-colors duration-300 mx-auto block;
+	}
+
+	.test-account-info {
+		@apply text-red-500 block text-center;
 	}
 }

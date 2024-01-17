@@ -34,6 +34,7 @@
 						<input
 							type="password"
 							class="input"
+							autocomplete="off"
 							v-model="credentials.password"
 							:class="{ empty: v$.password.$error }"
 						/>
@@ -41,7 +42,7 @@
 					</div>
 					<span v-if="v$.password.$error" class="input-error">{{ v$.password.$errors[0].$message }}</span>
 
-					<input type="submit" value="Login" class="form-submit" />
+					<input type="submit" value="Login" class="form-submit cursor-pointer" />
 
 					<p class="text-[#8F9DBF] mt-[16px]">
 						Don't have account?

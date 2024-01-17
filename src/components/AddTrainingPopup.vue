@@ -7,6 +7,7 @@
 			class="popup-body bg-[#101D40] text-[#6C7CA6] w-4/5 max-w-[400px] p-[32px] rounded-md font-semibold shadow-[0_0_2px_2px_rgba(108,124,166,0.3)]"
 			ref="targetRef"
 		>
+			<h2 class="title mb-[16px]">Add Training</h2>
 			<div class="inputs">
 				<label for="date" class="label text-[20px]" :class="{ 'label-error': dateErr }">Date:</label>
 				<input
@@ -79,8 +80,8 @@
 					/>
 				</div>
 				<span class="input-error" v-if="v$.hours.$error || v$.minutes.$error || v$.seconds.$error"
-					>Minutes input is required and value need to be graeter than 1, seconds inputs is required and value should be
-					from 1-59 range
+					>Minutes input is required and value need to 1-59 range, seconds inputs is required and value should be from
+					1-59 range
 				</span>
 			</div>
 			<div class="buttons-box flex justify-center space-x-[16px] mt-[32px]">
@@ -98,7 +99,7 @@
 
 <script setup>
 //imports
-import { ref, reactive, computed, onMounted } from 'vue'
+import { ref, reactive, computed } from 'vue'
 import { required, minValue, maxValue } from '@vuelidate/validators'
 import useValidate from '@vuelidate/core'
 import { useStoreNotes } from '../stores/storeNotes'
@@ -152,6 +153,7 @@ const rules = computed(() => {
 		minutes: {
 			required,
 			minValue: minValue(0),
+			maxValue: maxValue(59),
 		},
 
 		seconds: {
@@ -186,7 +188,7 @@ const saveTraining = () => {
 //function for formatting distance value for 2 decimal points
 const formatDistance = () => {
 	if (trainingDetails.distance !== '') {
-		trainingDetails.distance = parseInt(trainingDetails.distance).toFixed(2)
+		trainingDetails.distance = parseFloat(trainingDetails.distance).toFixed(2)
 	}
 }
 
